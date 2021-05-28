@@ -1,0 +1,8 @@
+.red {
+  display: flex;
+  background-color: red;
+}
+.important {
+  display: flex;
+  background-color: gray;
+}

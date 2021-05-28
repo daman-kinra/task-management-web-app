@@ -5,6 +5,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Tasks from "./pages/tasks/Tasks";
 import Project from "./pages/project/Project";
+import "./App.css";
 function App() {
   const {
     user,
@@ -35,7 +36,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/project/:id" component={Project} />
-          <Route exact path="/project/:id/tasks" component={Tasks} />
+          <Route exact path="/tasks/:id" component={Tasks} />
         </Switch>
       </Router>
     );
