@@ -1,0 +1,143 @@
+.projects {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+.projects .left__container {
+  display: grid;
+  grid-template-rows: 1fr 3fr 1fr;
+  padding: 1rem;
+}
+.projects .create {
+  justify-content: center;
+}
+.allProjects {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow-y: auto;
+  gap: 1rem;
+  align-items: center;
+}
+.linksss {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  color: #866118;
+  background-color: #fff;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease;
+}
+.linksss:hover {
+  transform: scale(1.06);
+}
+#active {
+  background-color: #866118;
+  color: #fff;
+}
+.projects .right__container {
+  position: relative;
+}
+.projects .allprojects {
+  display: flex;
+}
+.details {
+  flex: 1;
+}
+.team {
+  flex: 1;
+  text-align: center;
+  max-height: 100%;
+  overflow-y: auto;
+  color: #866118;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team div {
+  padding: 0.5rem;
+  border: 1px solid pink;
+  border-radius: 0.3rem;
+  margin-top: 0.5rem;
+  width: 80%;
+}
+.req {
+  margin-top: 2rem;
+}
+.mobile {
+  display: none;
+}
+.teamss {
+  padding: 0.5rem;
+  border: 1px solid pink;
+  border-radius: 0.3rem;
+  margin-top: 0.5rem;
+  width: 80%;
+  text-align: center;
+}
+@media (max-width: 991px) {
+  .linksss {
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+  .projects .left__container {
+    display: none;
+  }
+  .allprojects {
+    grid-template-columns: auto;
+  }
+  .cross-mobile {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    cursor: pointer;
+    display: block;
+  }
+  .projects .allprojects {
+    display: none;
+  }
+  .pie {
+    min-width: 200px;
+    min-height: 200px;
+  }
+  .mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    height: calc((100% - 15vh) - 5vh);
+    max-height: calc(100% - 15vh);
+    overflow-y: auto;
+
+    background-color: #fff;
+    width: 100%;
+    position: absolute;
+    padding: 1rem;
+
+    bottom: 5vh;
+  }
+}
+.yes .create {
+  width: 100%;
+}
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  cursor: pointer;
+}
+@media (max-width: 400px) {
+  .linksss {
+    font-size: 1.3rem;
+  }
+  .teamss {
+    font-size: 0.8rem;
+  }
+}

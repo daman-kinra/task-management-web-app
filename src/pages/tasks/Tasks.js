@@ -3,6 +3,7 @@ import { Data } from "../../context/Context";
 import { fieldValue } from "../../firebase/firebase";
 import DateTimePicker from "react-datetime-picker";
 import Header from "../../components/header/Header";
+import Loading from "../../components/Loading/Loading";
 function Tasks(props) {
   const { projectsRef, usersRef, userDetails, allProjects } = useContext(Data);
   const taskRef = projectsRef.doc(props.match.params.id).collection("tasks");
@@ -15,6 +16,9 @@ function Tasks(props) {
   const [tracking, setTracking] = useState(false);
   const [position, setPosition] = useState(-1);
   const [clear, setClear] = useState(null);
+  const [currentTask, setCurrentTask] = useState("");
+  const [time, setTime] = useState(0);
+  const [sec, setSec] = useState(0);
   useEffect(async () => {
     const currentProject = allProjects.find(
       (item) => item.id === props.match.params.id
@@ -69,19 +73,39 @@ function Tasks(props) {
       setDeadline(date);
     }
   };
-  const trackTime = (id) => {
+
+  const trackTime = (startTime) => {
+    setTime(startTime);
     setClear(
-      setInterval(async () => {
-        const doc = await taskRef.doc(id).get();
-        if (!doc.exists) clearInterval(clear);
-        await taskRef.doc(id).update({ timeGiven: doc.data().timeGiven + 60 });
-      }, 60000)
+      setInterval(() => {
+        setTime((prev) => prev + 1);
+      }, 1000)
     );
   };
+  // const trackTime = (id) => {
+  //   setClear(
+  //     setInterval(async () => {
+  //       const doc = await taskRef.doc(id).get();
+  //       if (!doc.exists) clearInterval(clear);
+  //       await taskRef.doc(id).update({ timeGiven: doc.data().timeGiven + 60 });
+  //     }, 60000)
+  //   );
+  // };
+
+  useEffect(() => {
+    setSec(() => {
+      if (sec > 60) {
+        return 0;
+      } else {
+        return time % 60;
+      }
+    });
+  }, [time]);
   return (
     <div>
+      {`${Math.floor(time / 3600)} : ${Math.floor(time / 60)} : ${sec}`}
       {loading ? (
-        <h1>loading....</h1>
+        <Loading />
       ) : (
         <div>
           <Header projectId={project.id} />
@@ -120,6 +144,9 @@ function Tasks(props) {
                         setTracking(false);
                         setPosition(-1);
                         clearInterval(clear);
+                        taskRef.doc(currentTask.split("_")[0]).update({
+                          timeGiven: time,
+                        });
                       }}
                     >
                       Pause
@@ -131,10 +158,11 @@ function Tasks(props) {
                   userDetails.email === item.assignedTo && (
                     <button
                       onClick={() => {
-                        console.log(pos);
                         setTracking(true);
                         setPosition(pos);
-                        trackTime(item.taskId);
+                        // trackTime(item.taskId);
+                        setCurrentTask(`${item.taskId}_${item.title}`);
+                        trackTime(item.timeGiven);
                       }}
                     >
                       Play

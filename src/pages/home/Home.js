@@ -1,10 +1,20 @@
 import React, { useContext, useState } from "react";
 import { Data } from "../../context/Context";
-import { fieldValue } from "../../firebase/firebase";
+import { app, fieldValue } from "../../firebase/firebase";
 import { Link } from "react-router-dom";
+import { CgAddR } from "react-icons/cg";
+import { RiAddFill } from "react-icons/ri";
+import { FaRegBell } from "react-icons/fa";
+import { GrClose } from "react-icons/gr";
+import { FcCheckmark } from "react-icons/fc";
+import { GiHamburgerMenu } from "react-icons/gi";
+import user from "../../images/user.png";
+import "./home.css";
 function Home(props) {
   const { allProjects, userDetails, projectsRef, usersRef } = useContext(Data);
   const [newProject, setNewProject] = useState("");
+  const [show, setShowNotification] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const createNewProject = async () => {
     const name = newProject;
     try {
@@ -80,48 +90,180 @@ function Home(props) {
     }
   };
   return (
-    <div>
-      <input
-        type="text"
-        value={newProject}
-        onChange={(e) => {
-          setNewProject(e.target.value);
-        }}
-      />
-      <button onClick={createNewProject}>CREATE PROJECT</button>
-      {allProjects.map((data, pos) => {
-        return (
-          <Link
-            key={data.id}
-            to={`/project/${data.id}`}
-            style={{ display: "block" }}
-          >
-            {data.name}
-          </Link>
-        );
-      })}
-      {userDetails.projectRequests.map((item) => {
-        return (
-          <div key={item.id}>
-            <p>{item.name}</p>
-            <p>{item.owner}</p>
-            <button
-              onClick={() => {
-                acceptProjectInvite(item.id);
+    <div className="home">
+      <div className={`left__container ${mobile ? "yes" : ""}`}>
+        <GrClose
+          className="cross-mobile"
+          size="2rem"
+          onClick={() => {
+            setMobile(false);
+          }}
+        />
+        <div className="create">
+          <div className="custom">
+            <input
+              type="text"
+              value={newProject}
+              placeholder="NEW PROJECT"
+              onChange={(e) => {
+                setNewProject(e.target.value);
               }}
-            >
-              ACCEPT
-            </button>
-            <button
-              onClick={() => {
-                rejectProjectInvite(item.id);
-              }}
-            >
-              REJECT
-            </button>
+            />
+            <span></span>
           </div>
-        );
-      })}
+          <div className="button">
+            <CgAddR
+              size="3rem"
+              color="#866118"
+              onClick={createNewProject}
+              style={{ cursor: "pointer" }}
+              className="add"
+            />
+          </div>
+        </div>
+        <div className="profile">
+          <div className="image">
+            <img
+              src={userDetails.photoUrl ? userDetails.photoUrl : user}
+              alt=""
+              className="profile__img"
+            />
+            <input type="file" id="file" />
+            <label htmlFor="file">
+              <div className="updatephoto">
+                <RiAddFill size="80%" color="#000" />
+              </div>
+            </label>
+          </div>
+          <h2>{userDetails.name}</h2>
+        </div>
+        <div className="joined">
+          <div className="emailbox">
+            <h2>Email:</h2>
+            <h2>{userDetails.email}</h2>
+          </div>
+          <div className="join">
+            <h2>Joined On: </h2>
+            <h2>
+              {new Date(
+                userDetails.joined?.seconds * 1000
+              ).toLocaleDateString()}
+            </h2>
+          </div>
+        </div>
+        <div className="footer">
+          <p>BY XCLS00</p>
+        </div>
+      </div>
+      <div className="right__container">
+        <div className="headerhome">
+          <div className="burger">
+            <GiHamburgerMenu
+              size="2rem"
+              onClick={() => {
+                setMobile(true);
+              }}
+            />
+          </div>
+          <div className="requests">
+            <div
+              className="bell"
+              // onMouseEnter={() => {
+              //   setShowNotification(true);
+              // }}
+            >
+              {!show ? (
+                <>
+                  <FaRegBell
+                    size="2rem"
+                    onClick={() => {
+                      setShowNotification(true);
+                    }}
+                  />
+                  <p
+                    onClick={() => {
+                      setShowNotification(true);
+                    }}
+                  >
+                    {userDetails.projectRequests.length}
+                  </p>
+                </>
+              ) : (
+                <GrClose
+                  size="2rem"
+                  onClick={() => {
+                    setShowNotification(false);
+                  }}
+                />
+              )}
+            </div>
+            <div
+              className={`list ${show ? "show" : ""}`}
+              // onMouseLeave={() => {
+              //   setShowNotification(false);
+              // }}
+            >
+              {userDetails.projectRequests.length === 0 ? (
+                <div className="singleRequest">No Requests</div>
+              ) : (
+                userDetails.projectRequests.map((item) => {
+                  return (
+                    <div className="singleRequest">
+                      <p>{item.name}</p>
+                      <p>{item.owner}</p>
+                      <div className="options-buttons">
+                        <div className="cross">
+                          <GrClose
+                            color="red"
+                            onClick={() => {
+                              rejectProjectInvite(item.id);
+                            }}
+                          />
+                        </div>
+                        <div className="accept">
+                          <FcCheckmark
+                            onClick={() => {
+                              acceptProjectInvite(item.id);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+          <button
+            className="login__btn"
+            onClick={() => {
+              app.auth().signOut();
+            }}
+          >
+            {" "}
+            Logout
+          </button>
+        </div>
+        <div className="allprojects">
+          {allProjects.map((item) => {
+            return (
+              <Link key={item.id} to={`/project/${item.id}`} className="links">
+                <div className="singleProject">
+                  <h3>{item.name}</h3>
+                  <div className="owner">
+                    <h3>Owner:</h3>
+                    <h3>{item.owner}</h3>
+                  </div>
+                  <div className="task__deatils">
+                    <h3>Total : {item.totalTasks}</h3>
+                    <h3>Completed : {item.completedTasks} </h3>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

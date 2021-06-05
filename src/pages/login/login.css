@@ -1,0 +1,338 @@
+.login__main__container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+.left__container {
+  flex: 0.3;
+  background-color: #f2d184;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  width: 100%;
+  padding: 3rem;
+  flex: 0.3;
+}
+.title {
+  font-family: "Kaushan Script", cursive;
+  color: #866118;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+.title::after {
+  content: "";
+  position: absolute;
+  height: 0.2rem;
+  width: 100%;
+  background-color: #866118;
+  left: 0;
+  bottom: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: 0.4s ease-in-out;
+}
+.title:hover::after {
+  transform: scaleX(1);
+  transform-origin: right;
+}
+.text {
+  color: #866118;
+  line-height: 2.5rem;
+  font-size: 2rem;
+  position: relative;
+  z-index: 1;
+}
+.artarea {
+  flex: 0.7;
+  display: flex;
+  flex-direction: column;
+}
+.art__image {
+  flex: 0.9;
+  position: relative;
+  /* background-image: url("../../images/leftpart_bg.png");
+  background-position: bottom center;
+  background-size: cover;
+  background-repeat: no-repeat; */
+}
+.left__bg__img {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+.footer {
+  flex: 0.1;
+  display: flex;
+  align-items: center;
+  padding-left: 3rem;
+}
+
+.right__container {
+  flex: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login__box {
+  width: 40%;
+  border: 2px solid pink;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 2em 4rem 2rem;
+  max-height: 80%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.header {
+  color: #866118;
+  position: relative;
+  font-size: 1.3rem !important;
+  margin-bottom: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  /* padding: 0rem 0rem 4rem 0rem; */
+}
+.input {
+  min-height: 3rem;
+  height: 3rem;
+  padding-left: 1rem;
+  font-size: 1rem;
+  outline: 0;
+  border: 0;
+  background-color: #e4e4e4;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  transition: 0.3s ease-in-out;
+}
+.input:focus {
+  border-color: pink;
+}
+.input:hover {
+  border-color: pink;
+}
+::placeholder {
+  color: #000;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: #000;
+}
+
+::-ms-input-placeholder {
+  color: #000;
+}
+label {
+  margin-bottom: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #866118;
+}
+@media only screen and (max-width: 991px) {
+  .left__container {
+    display: none;
+  }
+  .right__container {
+    flex: 1;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .header {
+    margin-right: 3rem;
+  }
+  .login__header {
+    padding-top: 3rem;
+  }
+  .login__box {
+    width: 70%;
+    padding-top: 0;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .header h2 {
+    font-size: 1.5rem;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .login__box {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-radius: 0;
+    height: 100vh;
+    max-height: 100vh;
+    padding-bottom: 7rem;
+    overflow-y: auto;
+    justify-content: auto;
+    padding-top: 3rem;
+  }
+  .header h2 {
+    font-size: 1.5rem;
+  }
+  .header {
+    padding-left: 1rem !important;
+  }
+  .input {
+    height: 2.7rem;
+    width: 100%;
+  }
+  .login__btn {
+    padding: 0.5rem 2rem;
+    align-self: center;
+    font-size: 0.7rem;
+  }
+  .firebase__error {
+    align-self: center;
+  }
+  .not__registered {
+    align-self: center;
+  }
+  form {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+@media only screen and (max-width: 991px) and (orientation: landscape) {
+  .login__box {
+    position: fixed;
+    top: 0;
+    min-height: 100vh;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    padding-bottom: 7rem;
+    padding-top: 0rem;
+  }
+}
+.error {
+  color: red;
+  margin-bottom: 2rem;
+  margin-top: 0.3rem;
+}
+.firebase__error {
+  margin-top: 0.7rem;
+  color: red;
+}
+@media only screen and (max-width: 300px) {
+  .not__registered {
+    display: flex;
+    flex-direction: column;
+  }
+  .not__registered a {
+    margin-left: 0rem !important;
+  }
+}
+.not__registered {
+  margin-top: 0.5rem;
+  color: #866118;
+}
+.not__registered a {
+  margin-left: 0.7rem;
+  font-weight: bold;
+}
+.login__btn {
+  min-height: 3rem;
+  padding: 0.7rem 2.5rem;
+  color: #fff;
+  background-color: pink;
+  font-size: 1.1rem;
+  border-radius: 0.5rem;
+  outline: 0;
+  border: 0;
+  transition: 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  font-weight: bold;
+  /* border: 2px solid transparent; */
+  transition: 0.3s ease-out;
+  position: relative;
+  z-index: 2;
+}
+.login__btn::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background-color: #ea4c89;
+  border-radius: 0.5rem;
+  z-index: -2;
+  transform: scale(0, 0);
+  border: 2px solid transparent;
+  transition: 0.3s ease-in-out;
+}
+.login__btn:hover::after {
+  transform: scale(1, 1);
+  border: 2px solid lightgray;
+}
+.login__btn::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+  z-index: -1;
+  transform: scale(0, 0);
+  border: 2px solid transparent;
+  transition: 0.3s ease-in-out;
+}
+.login__btn:hover::before {
+  transform: scale(1, 1);
+  border: 2px solid lightgray;
+}
+.google__login {
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+}
+.logins {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.or {
+  height: 2px;
+  width: 30%;
+  position: relative;
+  background-color: pink;
+}
+.or p {
+  font-size: 1.5rem;
+  font-weight: lighter;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translate(-50%);
+  background-color: #fff;
+  padding: 0rem 1rem;
+}
+@media (max-width: 400px) {
+  .logins {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .or {
+    width: 100%;
+  }
+  .header {
+    padding-left: 0 !important;
+  }
+}
