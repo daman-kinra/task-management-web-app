@@ -82,16 +82,6 @@ function Tasks(props) {
       }, 1000)
     );
   };
-  // const trackTime = (id) => {
-  //   setClear(
-  //     setInterval(async () => {
-  //       const doc = await taskRef.doc(id).get();
-  //       if (!doc.exists) clearInterval(clear);
-  //       await taskRef.doc(id).update({ timeGiven: doc.data().timeGiven + 60 });
-  //     }, 60000)
-  //   );
-  // };
-
   useEffect(() => {
     setSec(() => {
       if (sec > 60) {
@@ -103,12 +93,12 @@ function Tasks(props) {
   }, [time]);
   return (
     <div>
-      {`${Math.floor(time / 3600)} : ${Math.floor(time / 60)} : ${sec}`}
       {loading ? (
         <Loading />
       ) : (
         <div>
           <Header projectId={project.id} />
+          {`${Math.floor(time / 3600)} : ${Math.floor(time / 60)} : ${sec}`}
           <input
             type="text"
             value={newTask}

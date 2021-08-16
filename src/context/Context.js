@@ -25,6 +25,21 @@ export function Context(props) {
       }
     });
   };
+
+  const makeUserOnline = () => {
+    return new Promise(async (res, rej) => {
+      try {
+        await usersRef.doc(user.email).update({ online: true });
+        window.addEventListener("beforeunload", async function (e) {
+          e.preventDefault();
+          await usersRef.doc(user.email).update({ online: false });
+        });
+        res("");
+      } catch (err) {
+        rej(err);
+      }
+    });
+  };
   const getAllProjectDetails = () => {
     return new Promise((res, rej) => {
       try {
@@ -59,6 +74,7 @@ export function Context(props) {
         getUserInformation,
         projectsRef,
         usersRef,
+        makeUserOnline,
       }}
     >
       {props.children}

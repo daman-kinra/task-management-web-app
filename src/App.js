@@ -25,12 +25,14 @@ function App() {
     canEnter,
     getAllProjectDetails,
     getUserInformation,
+    makeUserOnline,
   } = useContext(Data);
   useEffect(async () => {
     if (user) {
       setUpdate("");
       await getUserInformation();
       await getAllProjectDetails();
+      await makeUserOnline();
     }
   }, [user]);
   if (loading) {
