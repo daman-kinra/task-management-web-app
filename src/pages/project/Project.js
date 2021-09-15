@@ -10,11 +10,8 @@ import Loading from "../../components/Loading/Loading";
 import { Data } from "../../context/Context";
 import { app } from "../../firebase/firebase";
 import { PieChart } from "react-minimal-pie-chart";
-import { io } from "socket.io-client";
-import "./project.css";
-import axios from "axios";
 
-const socket = io("http://localhost:5000");
+import "./project.css";
 
 function Project(props) {
   const [newUserEmail, setNewUser] = useState("");
@@ -27,6 +24,7 @@ function Project(props) {
   const [projectChat, setProjectChat] = useState([]);
   const [currentRoom, setCurrentRoom] = useState(props.match.params.id);
   const [typingStatus, setTypingStatus] = useState({ who: "", typing: false });
+  const [onlineUsers, setOnlineUsers] = useState([]);
   useEffect(async () => {
     const doc = await projectsRef.doc(props.match.params.id).get();
     if (!doc.exists) {
@@ -38,57 +36,7 @@ function Project(props) {
     setLoading(false);
     setMessage("");
     setProjectChat([]);
-    socket.emit("join-this-project-room", props.match.params.id);
-    if (currentRoom !== props.match.params.id) {
-      socket.emit("disconnect-from-this-room", currentRoom, userDetails.email);
-      setCurrentRoom(props.match.params.id);
-    }
-
-    axios
-      .post("http://localhost:5000/auth/projectMessages", {
-        roomId: props.match.params.id,
-      })
-      .then((res) => {
-        console.log(res);
-        setProjectChat(res.data);
-        setMessage("");
-      });
   }, [props.match.params.id]);
-  // useEffect(() => {
-  //   console.log(currentRoom);
-  // }, [currentRoom]);
-  useEffect(() => {
-    socket.emit("join-this-project-room", props.match.params.id);
-    socket.on("delete-message", (id) => {
-      setProjectChat((prev) => prev.filter((item) => item._id !== id));
-    });
-    socket.on("new-message", (newMessage) => {
-      setProjectChat((prev) => [...prev, newMessage]);
-      setMessage("");
-    });
-    socket.on("left-chat", (data) => {
-      console.log(data);
-      setProjectChat((prev) => [...prev, data]);
-      setMessage("");
-    });
-    socket.on("typing-started", (who) => {
-      setTypingStatus({ who: who, typing: true });
-    });
-    socket.on("typing-stopped", (who) => {
-      setTypingStatus({ who: who, typing: false });
-    });
-  }, []);
-
-  const sendMessage = async () => {
-    const res = await axios.post("http://localhost:5000/auth/newMessage", {
-      message,
-      sender: userDetails.email,
-      mentioned: [],
-      roomId: props.match.params.id,
-    });
-    console.log(res);
-    // setProjectChat((prev) => [...prev, res.data]);
-  };
   const addNewPartener = async () => {
     const email = newUserEmail;
     try {
@@ -127,55 +75,8 @@ function Project(props) {
       setNewUser(email);
     }
   };
-  const deleteMessage = async (id) => {
-    const res = await axios.post("http://localhost:5000/auth/deleteMessage", {
-      roomId: currentRoom,
-      _id: id,
-    });
-  };
   return (
     <div>
-      {typingStatus.typing && <h1>{typingStatus.who} typing...</h1>}
-      <hr />
-      {projectChat.map((chat, pos) => {
-        return (
-          <p key={pos}>
-            {chat.message} - {chat.sender} -{" "}
-            {chat.sender === userDetails.email && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  deleteMessage(chat._id);
-                }}
-              >
-                Delete
-              </button>
-            )}
-          </p>
-        );
-      })}
-      <div className="chat-input">
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              sendMessage();
-            }
-          }}
-          onFocus={() => {
-            socket.emit(
-              "typing-start",
-              props.match.params.id,
-              userDetails.email
-            );
-          }}
-          onBlur={() => {
-            socket.emit("typing-stop", props.match.params.id);
-          }}
-        />
-      </div>
       {loading ? (
         <Loading />
       ) : (
