@@ -12,6 +12,7 @@ import { app } from "../../firebase/firebase";
 import { PieChart } from "react-minimal-pie-chart";
 
 import "./project.css";
+import swal from "sweetalert";
 
 function Project(props) {
   const [newUserEmail, setNewUser] = useState("");
@@ -38,6 +39,7 @@ function Project(props) {
     setProjectChat([]);
   }, [props.match.params.id]);
   const addNewPartener = async () => {
+    if (!newUserEmail) swal("", "Enter a valid Email", "error");
     const email = newUserEmail;
     try {
       setNewUser("");

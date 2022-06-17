@@ -12,6 +12,11 @@
 .red {
   display: flex;
   background-color: red;
+  color: white;
+}
+.green {
+  display: flex;
+  background-color: green;
 }
 .important {
   display: flex;

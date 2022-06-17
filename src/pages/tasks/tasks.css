@@ -1,0 +1,47 @@
+.task__container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+.task__left__container {
+  flex: 0.3;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2d184;
+  padding: 1rem;
+}
+.task__right__container {
+  flex: 0.7;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+.task__left__container .input {
+  margin-bottom: 1rem;
+}
+.header__wrapper {
+  align-self: flex-end;
+  margin-bottom: 1rem;
+}
+.header__wrapper a {
+  margin-right: 1rem;
+}
+.task__card {
+  display: flex;
+  padding: 1rem;
+  border-radius: 6px;
+  color: black;
+  align-items: center;
+  justify-content: space-between;
+  background-color: lightblue;
+  margin-bottom: 1rem;
+}
+.time {
+  display: flex;
+  display: none;
+}
+.task__cont {
+  max-height: calc(100vh - 5rem);
+  padding: 1rem;
+  overflow-y: auto;
+}

@@ -10,12 +10,15 @@ import { FcCheckmark } from "react-icons/fc";
 import { GiHamburgerMenu } from "react-icons/gi";
 import user from "../../images/user.png";
 import "./home.css";
+import swal from "sweetalert";
+
 function Home(props) {
   const { allProjects, userDetails, projectsRef, usersRef } = useContext(Data);
   const [newProject, setNewProject] = useState("");
   const [show, setShowNotification] = useState(false);
   const [mobile, setMobile] = useState(false);
   const createNewProject = async () => {
+    if (!newProject) swal("", "Enter a valid project name", "error");
     const name = newProject;
     try {
       setNewProject("");

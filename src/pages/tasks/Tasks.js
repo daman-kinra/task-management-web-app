@@ -4,6 +4,9 @@ import { fieldValue } from "../../firebase/firebase";
 import DateTimePicker from "react-datetime-picker";
 import Header from "../../components/header/Header";
 import Loading from "../../components/Loading/Loading";
+import "./tasks.css";
+import swal from "sweetalert";
+
 function Tasks(props) {
   const { projectsRef, usersRef, userDetails, allProjects } = useContext(Data);
   const taskRef = projectsRef.doc(props.match.params.id).collection("tasks");
@@ -49,6 +52,14 @@ function Tasks(props) {
     const task = newTask;
     const date = deadline;
     const taskarr = allTasks;
+    if (!task) {
+      swal("", "Must have a task Name", "error");
+      return;
+    }
+    if (date === new Date().getTime()) {
+      swal("", "Add a deadline", "error");
+      return;
+    }
     try {
       setTask("");
       setDeadline(new Date());
@@ -96,74 +107,102 @@ function Tasks(props) {
       {loading ? (
         <Loading />
       ) : (
-        <div>
-          <Header projectId={project.id} />
-          {`${Math.floor(time / 3600)} : ${Math.floor(time / 60)} : ${sec}`}
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => {
-              setTask(e.target.value);
-            }}
-          />
-          <DateTimePicker onChange={setDeadline} value={deadline} />
-          <input type="text" list="users" />
-          <datalist id="users">
-            {project.team.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </datalist>
-          <button onClick={addNewTask}>ADD NEW TASK</button>
-          {allTasks.map((item, pos) => {
-            return (
-              <div
-                className={`${
-                  item.deadline?.seconds - item.createdAt?.seconds < 84600
-                    ? "red"
-                    : item.priority > 0
-                    ? "important"
-                    : ""
-                }`}
-                key={item.taskId}
-              >
-                <p>{item.title}</p>
-                {tracking ? (
-                  pos === position ? (
-                    <button
-                      onClick={() => {
-                        setTracking(false);
-                        setPosition(-1);
-                        clearInterval(clear);
-                        taskRef.doc(currentTask.split("_")[0]).update({
-                          timeGiven: time,
-                        });
-                      }}
-                    >
-                      Pause
-                    </button>
-                  ) : (
-                    ""
-                  )
-                ) : (
-                  userDetails.email === item.assignedTo && (
-                    <button
-                      onClick={() => {
-                        setTracking(true);
-                        setPosition(pos);
-                        // trackTime(item.taskId);
-                        setCurrentTask(`${item.taskId}_${item.title}`);
-                        trackTime(item.timeGiven);
-                      }}
-                    >
-                      Play
-                    </button>
-                  )
-                )}
-                <h2>{Math.floor(item.timeGiven / 3600)} : </h2>
-                <h2>{Math.floor(item.timeGiven / 60)}</h2>
-              </div>
-            );
-          })}
+        <div className="task__container">
+          <div className="task__left__container">
+            <h1 className="title">Create New Task</h1>
+            <input
+              className="input"
+              placeholder="Task Name"
+              type="text"
+              value={newTask}
+              onChange={(e) => {
+                setTask(e.target.value);
+              }}
+            />
+            <DateTimePicker
+              className="input"
+              onChange={setDeadline}
+              value={deadline}
+            />
+            <input
+              type="text"
+              list="users"
+              className="input"
+              placeholder="Assignee"
+            />
+            <datalist id="users">
+              {project.team.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </datalist>
+            <button
+              className="login__btn"
+              style={{ zIndex: 0 }}
+              onClick={addNewTask}
+            >
+              ADD NEW TASK
+            </button>
+          </div>
+          <div className="task__right__container">
+            <div className="header__wrapper">
+              <Header projectId={project.id} />
+            </div>
+            {/* {`${Math.floor(time / 3600)} : ${Math.floor(time / 60)} : ${sec}`} */}
+            <div className="task__cont">
+              {allTasks.map((item, pos) => {
+                return (
+                  <div
+                    className={`task__card ${
+                      item.deadline?.seconds - item.createdAt?.seconds < 84600
+                        ? "red"
+                        : item.priority > 0
+                        ? "important"
+                        : ""
+                    }`}
+                    key={item.taskId}
+                  >
+                    <p>{item.title}</p>
+                    {tracking ? (
+                      pos === position ? (
+                        <button
+                          onClick={() => {
+                            setTracking(false);
+                            setPosition(-1);
+                            clearInterval(clear);
+                            taskRef.doc(currentTask.split("_")[0]).update({
+                              timeGiven: time,
+                            });
+                          }}
+                        >
+                          Pause
+                        </button>
+                      ) : (
+                        ""
+                      )
+                    ) : (
+                      userDetails.email === item.assignedTo && (
+                        <button
+                          onClick={() => {
+                            setTracking(true);
+                            setPosition(pos);
+                            // trackTime(item.taskId);
+                            setCurrentTask(`${item.taskId}_${item.title}`);
+                            trackTime(item.timeGiven);
+                          }}
+                        >
+                          Play
+                        </button>
+                      )
+                    )}
+                    <div className="time">
+                      <h2>{Math.floor(item.timeGiven / 3600)} : </h2>
+                      <h2>{Math.floor(item.timeGiven / 60)}</h2>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
     </div>
